@@ -49,10 +49,10 @@ public class RentalService {
     }
 
     // Проверить доступность автомобиля на указанный период
-    public boolean isCarAvailable(String vin, LocalDate startDate, LocalDate endDate) {
+    public boolean isCarAvailable(String city, LocalDate startDate, LocalDate endDate) {
         List<Rental> rentals = rentalRepository.findAll();
         return rentals.stream()
-                .noneMatch(rental -> rental.getCar().getVin().equals(vin) &&
+                .noneMatch(rental -> rental.getCar().getCity().equals(city) &&
                         !rental.getEndDate().isBefore(startDate) &&
                         !rental.getStartDate().isAfter(endDate));
     }

@@ -50,11 +50,11 @@ public class CarController {
     }
 
     // Проверить доступность автомобиля на указанный период
-    @GetMapping("/{vin}/availability")
+    @GetMapping("/availability")
     public boolean isCarAvailable(
-            @PathVariable String vin,
+            @RequestParam String city,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate) {
-        return carService.isCarAvailable(vin, startDate, endDate);
+        return carService.isCarAvailable(city, startDate, endDate);
     }
 }

@@ -58,8 +58,8 @@ public class CarService {
     }
 
     // Проверить доступность автомобиля на указанный период
-    public boolean isCarAvailable(String vin, LocalDate startDate, LocalDate endDate) {
-        return rentalService.isCarAvailable(vin, startDate, endDate);
+    public boolean isCarAvailable(String city, LocalDate startDate, LocalDate endDate) {
+        return rentalService.isCarAvailable(city, startDate, endDate);
     }
 
 }
