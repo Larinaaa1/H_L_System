@@ -5,6 +5,7 @@ import ru.hpclab.hl.module1.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -46,5 +47,14 @@ public class CarController {
     @PutMapping("/{vin}")
     public Car updateCar(@PathVariable String vin, @RequestBody Car updatedCar) {
         return carService.updateCar(vin, updatedCar);
+    }
+
+    // Проверить доступность автомобиля на указанный период
+    @GetMapping("/{vin}/availability")
+    public boolean isCarAvailable(
+            @PathVariable String vin,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        return carService.isCarAvailable(vin, startDate, endDate);
     }
 }

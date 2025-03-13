@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Service
 
@@ -45,6 +46,15 @@ public class RentalService {
             return rental;
         }
         return null;
+    }
+
+    // Проверить доступность автомобиля на указанный период
+    public boolean isCarAvailable(String vin, LocalDate startDate, LocalDate endDate) {
+        List<Rental> rentals = rentalRepository.findAll();
+        return rentals.stream()
+                .noneMatch(rental -> rental.getCar().getVin().equals(vin) &&
+                        !rental.getEndDate().isBefore(startDate) &&
+                        !rental.getStartDate().isAfter(endDate));
     }
 
 }

@@ -16,8 +16,10 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    public List<Car> getAllCars() {
+    @Autowired
+    private RentalService rentalService;
 
+    public List<Car> getAllCars() {
         return cars;
     }
 
@@ -55,6 +57,10 @@ public class CarService {
         return null;
     }
 
+    // Проверить доступность автомобиля на указанный период
+    public boolean isCarAvailable(String vin, LocalDate startDate, LocalDate endDate) {
+        return rentalService.isCarAvailable(vin, startDate, endDate);
+    }
 
 }
 
