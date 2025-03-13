@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ru.hpclab.hl.module1")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
