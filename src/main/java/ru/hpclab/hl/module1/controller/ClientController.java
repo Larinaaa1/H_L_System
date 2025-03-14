@@ -1,50 +1,48 @@
 package ru.hpclab.hl.module1.controller;
 
-import ru.hpclab.hl.module1.model.Client;
-import ru.hpclab.hl.module1.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.hpclab.hl.module1.dto.ClientDTO;
+import ru.hpclab.hl.module1.service.ClientService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
+@RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
 
-    @Autowired
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
+
 
     // Получить всех клиентов
     @GetMapping
-    public List<Client> getAllClients() {
+    public List<ClientDTO> getAllClients() {
         return clientService.getAllClients();
     }
 
-    // Получить клиента по водительским правам
-    @GetMapping("/{driverLicense}")
-    public Client getClientByDriverLicense(@PathVariable String driverLicense) {
-        return clientService.getClientByDriverLicense(driverLicense);
+    // Получить клиента по ID
+    @GetMapping("/{id}")
+    public ClientDTO getClientById(@PathVariable Long id) {
+        return clientService.getClientById(id);
     }
 
     // Создать нового клиента
     @PostMapping
-    public Client createClient(@RequestBody Client client) {
-        return clientService.saveClient(client);
-    }
-
-    // Удалить клиента по водительским правам
-    @DeleteMapping("/{driverLicense}")
-    public void deleteClient(@PathVariable String driverLicense) {
-        clientService.deleteClient(driverLicense);
+    public ClientDTO addClient(@RequestBody ClientDTO clientDTO) {
+        return clientService.saveClient(clientDTO);
     }
 
     // Обновить информацию о клиенте
-    @PutMapping("/{driverLicense}")
-    public Client updateClient(@PathVariable String driverLicense, @RequestBody Client updatedClient) {
-        return clientService.updateClient(driverLicense, updatedClient);
+    @PutMapping("/{id}")
+    public ClientDTO updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        return clientService.updateClient(id, clientDTO);
+    }
+
+    // Удалить клиента по ID
+    @DeleteMapping("/{id}")
+    public void deleteClient(@PathVariable Long id) {
+        clientService.deleteClient(id);
     }
 }

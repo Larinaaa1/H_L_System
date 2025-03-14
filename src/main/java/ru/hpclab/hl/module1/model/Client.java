@@ -1,43 +1,32 @@
 package ru.hpclab.hl.module1.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "t_client")
 public class Client {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "driver_license")
     private String driverLicense;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    // Конструктор с параметрами
-    public Client(String fullName, String driverLicense, String phoneNumber) {
-        this.fullName = fullName;
-        this.driverLicense = driverLicense;
-        this.phoneNumber = phoneNumber;
 
-    }
-
-    // Для работы с JSON
-    public Client(){
-
-    }
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getDriverLicense() {
-        return driverLicense;
-    }
-
-    public void setDriverLicense(String driverLicense) {
-        this.driverLicense = driverLicense;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }

@@ -1,37 +1,37 @@
 package ru.hpclab.hl.module1.controller;
 
-import ru.hpclab.hl.module1.model.Rental;
+import ru.hpclab.hl.module1.dto.RentalDTO;
 import ru.hpclab.hl.module1.service.RentalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/rentals")
-
 public class RentalController {
+
     private final RentalService rentalService;
 
-    @Autowired
     public RentalController(RentalService rentalService) {
         this.rentalService = rentalService;
     }
 
+    // Получить все аренды
     @GetMapping
-    public List<Rental> getAllRentals() {
+    public List<RentalDTO> getAllRentals() {
         return rentalService.getAllRentals();
     }
 
     // Получить аренду по ID
     @GetMapping("/{id}")
-    public Rental getRentalById(@PathVariable Long id) {
+    public RentalDTO getRentalById(@PathVariable Long id) {
         return rentalService.getRentalById(id);
     }
 
+    // Создать новую аренду
     @PostMapping
-    public void rentCar(@RequestBody Rental rental) {
-        rentalService.rentCar(rental);
+    public RentalDTO addRental(@RequestBody RentalDTO rentalDTO) {
+        return rentalService.saveRental(rentalDTO);
     }
 
     // Удалить аренду по ID
@@ -42,8 +42,7 @@ public class RentalController {
 
     // Обновить информацию об аренде
     @PutMapping("/{id}")
-    public Rental updateRental(@PathVariable Long id, @RequestBody Rental updatedRental) {
-        return rentalService.updateRental(id, updatedRental);
+    public RentalDTO updateRental(@PathVariable Long id, @RequestBody RentalDTO rentalDTO) {
+        return rentalService.updateRental(id, rentalDTO);
     }
-
 }

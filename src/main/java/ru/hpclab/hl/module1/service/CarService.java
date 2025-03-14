@@ -1,69 +1,77 @@
 package ru.hpclab.hl.module1.service;
 
-import ru.hpclab.hl.module1.model.Car;
-import ru.hpclab.hl.module1.repository.CarRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hpclab.hl.module1.dto.CarDTO;
+import ru.hpclab.hl.module1.mapper.CarMapper;
+import ru.hpclab.hl.module1.mapper.RentalMapper;
+import ru.hpclab.hl.module1.model.Car;
+import ru.hpclab.hl.module1.model.Client;
+import ru.hpclab.hl.module1.model.Rental;
+import ru.hpclab.hl.module1.repository.CarRepository;
+import ru.hpclab.hl.module1.repository.ClientRepository;
 
-import java.util.ArrayList;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.time.LocalDate;
+
 
 @Service
+@RequiredArgsConstructor
 public class CarService {
-    private static List<Car> cars = new ArrayList<>();
-    @Autowired
-    private CarRepository carRepository;
 
-    @Autowired
-    private RentalService rentalService;
+    private final CarRepository carRepository;
+    private final ClientRepository clientRepository;
+    private final RentalService rentalService;
 
-    public List<Car> getAllCars() {
-        return cars;
+    // Получить все автомобили
+    public List<CarDTO> getAllCars() {
+        return carRepository.findAll().stream()
+                .map(CarMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    // Получить автомобиль по VIN
-    public Car getCarByVin(String vin) {
-        return cars.stream()
-                .filter(car -> car.getVin().equals(vin))
-                .findFirst()
-                .orElse(null);
+    // Получить автомобиль по ID
+    public CarDTO getCarById(Long id) {
+        Optional<Car> carEntity = carRepository.findById(id);
+        return carEntity.map(CarMapper::toDto).orElse(null);
     }
 
-    public Car saveCar(Car car) {
-        cars.add(car);
-        return car;
+    @Transactional
+    // Сохранить автомобиль
+    public CarDTO saveCar(CarDTO carDTO) {
+        Car car = CarMapper.toEntity(carDTO);
+        Car savedCar = carRepository.save(car);
+        return CarMapper.toDto(savedCar);
     }
 
-    public void deleteCar(String vin) {
-        cars.removeIf(car -> car.getVin().equals(vin));
+    // Удалить автомобиль по ID
+    public void deleteCar(Long id) {
+        carRepository.deleteById(id);
     }
 
     // Обновить информацию об автомобиле
-    public Car updateCar(String vin, Car updatedCar) {
-        Optional<Car> carOptional = cars.stream()
-                .filter(car -> car.getVin().equals(vin))
-                .findFirst();
-        if (carOptional.isPresent()) {
-            Car car = carOptional.get();
-            car.setModel(updatedCar.getModel());
-            car.setColor(updatedCar.getColor());
-            car.setRentalCostPerDay(updatedCar.getRentalCostPerDay());
-            car.setCity(updatedCar.getCity());
-            car.setSalonName(updatedCar.getSalonName());
-            return car;
-        }
-        return null;
+    public CarDTO updateCar(Long id, CarDTO updatedCarDTO) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Автомобиль не найден"));
+
+        car.setVin(updatedCarDTO.getVin());
+        car.setModel(updatedCarDTO.getModel());
+        car.setColor(updatedCarDTO.getColor());
+        car.setRentalCostPerDay(updatedCarDTO.getRentalCostPerDay());
+        car.setCity(updatedCarDTO.getCity());
+        car.setSalonName(updatedCarDTO.getSalonName());
+
+        Car updatedCar = carRepository.save(car);
+
+        return CarMapper.toDto(updatedCar);
+
     }
 
     // Проверить доступность автомобиля на указанный период
-    public boolean isCarAvailable(String city, LocalDate startDate, LocalDate endDate) {
-        return rentalService.isCarAvailable(city, startDate, endDate);
+    public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
+        return rentalService.getAvailableCarInfo(city, startDate, endDate);
     }
-
 }
-
-
-
-
