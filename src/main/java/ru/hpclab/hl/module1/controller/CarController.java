@@ -1,6 +1,7 @@
 package ru.hpclab.hl.module1.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import ru.hpclab.hl.module1.dto.CarDTO;
 import ru.hpclab.hl.module1.model.Car;
 import ru.hpclab.hl.module1.mapper.CarMapper;
@@ -58,5 +59,12 @@ public class CarController {
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate) {
         return carService.getAvailableCarInfo(city, startDate, endDate);
+    }
+
+    // Удалить данные
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearAllCars() {
+        carService.clearAll();
+        return ResponseEntity.ok("Все машины были удалены");
     }
 }

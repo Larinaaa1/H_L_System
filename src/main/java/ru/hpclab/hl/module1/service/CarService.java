@@ -74,4 +74,9 @@ public class CarService {
     public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
         return rentalService.getAvailableCarInfo(city, startDate, endDate);
     }
+
+    // Метод очистки данных
+    public void clearAll() {
+        carRepository.deleteAll();
+    }
 }

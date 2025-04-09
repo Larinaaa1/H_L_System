@@ -1,6 +1,7 @@
 package ru.hpclab.hl.module1.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hpclab.hl.module1.dto.ClientDTO;
 import ru.hpclab.hl.module1.service.ClientService;
@@ -44,5 +45,12 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
+    }
+
+    // Удалить данные
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearAllClients() {
+        clientService.clearAll();
+        return ResponseEntity.ok("Все клиенты были удалены");
     }
 }

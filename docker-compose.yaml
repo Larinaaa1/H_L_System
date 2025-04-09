@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   # Инициализация базы данных
@@ -37,7 +37,7 @@ services:
     container_name: spring-boot-app
     restart: always
     depends_on:
-      - postgres  # Зависимость от базы данных
+      - postgres  # Зависимость от базы данныхsc
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase  # URL базы данных
       SPRING_DATASOURCE_USERNAME: admin  # Имя пользователя

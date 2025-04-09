@@ -64,4 +64,9 @@ public class ClientService {
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    // Метод очистки данных
+    public void clearAll() {
+        clientRepository.deleteAll();
+    }
 }

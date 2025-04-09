@@ -91,4 +91,9 @@ public class RentalService {
         // Находим первый доступный автомобиль
         return CarMapper.toDto(result);
     }
+
+    // Метод очистки данных
+    public void clearAll() {
+        rentalRepository.deleteAll();
+    }
 }

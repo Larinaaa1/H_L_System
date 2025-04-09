@@ -1,7 +1,7 @@
 package ru.hpclab.hl.module1.dto;
 
 public class ClientDTO {
-
+    private Long id;
     private String fullName;
     private String driverLicense;
     private String phoneNumber;
@@ -11,10 +11,19 @@ public class ClientDTO {
     }
 
     // Конструктор с параметрами
-    public ClientDTO(String fullName, String driverLicense, String phoneNumber) {
+    public ClientDTO(Long id, String fullName, String driverLicense, String phoneNumber) {
+        this.id = id;
         this.fullName = fullName;
         this.driverLicense = driverLicense;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFullName() {

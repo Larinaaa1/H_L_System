@@ -1,5 +1,6 @@
 package ru.hpclab.hl.module1.controller;
 
+import org.springframework.http.ResponseEntity;
 import ru.hpclab.hl.module1.dto.RentalDTO;
 import ru.hpclab.hl.module1.service.RentalService;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,12 @@ public class RentalController {
     @PutMapping("/{id}")
     public RentalDTO updateRental(@PathVariable Long id, @RequestBody RentalDTO rentalDTO) {
         return rentalService.updateRental(id, rentalDTO);
+    }
+
+    // Удалить данные
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearAllRentals() {
+        rentalService.clearAll();
+        return ResponseEntity.ok("Все аренды были удалены");
     }
 }

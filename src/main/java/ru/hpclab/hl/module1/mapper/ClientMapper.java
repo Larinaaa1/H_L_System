@@ -20,6 +20,7 @@ public class ClientMapper {
             return null;
         }
         return new ClientDTO(
+                client.getId(),
                 client.getFullName(),
                 client.getDriverLicense(),
                 client.getPhoneNumber()
