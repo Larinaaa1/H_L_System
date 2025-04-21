@@ -16,6 +16,7 @@ def clear_all():
 def clear_endpoint(endpoint):
     requests.delete(f"{BASE_URL}/{endpoint}/clear")
 
+
 def generate_car():
     brands = ["Toyota", "BMW", "Mercedes", "Audi", "Ford", "Tesla"]
     models = {
@@ -85,6 +86,10 @@ def populate(endpoint, count, clear=False):
         if count == 0:  # Если только очистка без добавления данных
             print(f"Таблица {endpoint} успешно очищена")
             return
+        print(f"Таблица {endpoint} очищена, начинаю добавление {count} записей")
+
+    else:
+        print(f"Добавляю {count} записей в таблицу {endpoint} (без очистки)")
 
     if endpoint == "cars":
         clear_endpoint("cars")
@@ -105,7 +110,8 @@ def populate(endpoint, count, clear=False):
                 print("Ответ сервера:", response.text)
 
     elif endpoint == "rentals":
-        clear_endpoint("rentals")
+        if clear:
+            clear_all()
         # Создаем клиентов и сохраняем их номера прав
         driver_licenses = []
         for _ in range(count):
@@ -114,7 +120,7 @@ def populate(endpoint, count, clear=False):
             if response.ok:
                 driver_licenses.append(client_data["driverLicense"])
             else:
-                print(f"Error creating client: {response.status_code}")
+                print(f"Ошибка создания клиента: {response.status_code}")
 
         # Создаем машины и сохраняем их VIN
         car_vins = []
@@ -124,25 +130,25 @@ def populate(endpoint, count, clear=False):
             if response.ok:
                 car_vins.append(car_data["vin"])
             else:
-                print(f"Error creating car: {response.status_code}")
+                print(f"Ошибка создания машины: {response.status_code}")
 
         # Создаем аренды
         successful_rentals = 0
-        for _ in range(count):
-            if not driver_licenses or not car_vins:
-                print("Not enough clients or cars")
+        for i in range(count):
+            if i >= len(driver_licenses) or i >= len(car_vins):
+                print("Нет такого клиента или машины")
                 break
 
             # Получаем случайные license и vin
-            license = random.choice(driver_licenses)
-            vin = random.choice(car_vins)
+            license = driver_licenses[i]
+            vin = car_vins[i]
 
             # Получаем ID через GET-запросы
             client_id = get_client_id_by_license(license)
             car_id = get_car_id_by_vin(vin)
 
             if not client_id or not car_id:
-                print(f"Warning: Client or car not found (license: {license}, vin: {vin})")
+                print(f"Предупреждение: Клиент или машина не найден (license: {license}, vin: {vin})")
                 continue
 
             rental_data = generate_rental(client_id, car_id)
@@ -150,12 +156,12 @@ def populate(endpoint, count, clear=False):
             if response.ok:
                 successful_rentals += 1
             else:
-                print(f"Error creating rental: {response.status_code}")
+                print(f"Ошибка создания аренды: {response.status_code}")
 
-        print(f"Successfully created {successful_rentals}/{count} rentals")
+        print(f"Успешно создано {successful_rentals}/{count} аренд")
 
     else:
-        print(f"Unknown endpoint: {endpoint}")
+        print(f"Неизвестный эндпоинт: {endpoint}")
 
 
 def main():
@@ -171,6 +177,9 @@ def main():
     if args.endpoint == "all":
         if args.clear:
             clear_all()
+            print("Все таблицы успешно очищены")
+            if args.count == 0:  # Если только очистка
+                return
         if args.count > 0:
             populate("cars", args.count, args.clear)
             populate("clients", args.count, args.clear)
