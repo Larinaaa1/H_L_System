@@ -1,16 +1,16 @@
-# version: '3.8'
+version: '3.8'
 
 services:
   # Инициализация базы данных
-  init-db:
-    image: python:3.11-alpine
-    container_name: db-init
-    volumes:
-      - ./initdb:/initdb  # Монтируем папку с скриптами инициализации
-    working_dir: /initdb  # Рабочая директория внутри контейнера
-    entrypoint: ["python", "generate_sql.py"]  # Запуск скрипта генерации SQL
-    networks:
-      - app-network
+#  init-db:
+#    image: python:3.11-alpine
+#    container_name: db-init
+#    volumes:
+#      - ./initdb:/initdb  # Монтируем папку с скриптами инициализации
+#    working_dir: /initdb  # Рабочая директория внутри контейнера
+#    entrypoint: ["python", "generate_sql.py"]  # Запуск скрипта генерации SQL
+#    networks:
+#      - app-network
 
   # База данных PostgreSQL
   postgres:
@@ -27,9 +27,9 @@ services:
       - ./initdb/scripts_python:/docker-entrypoint-initdb.d  # Монтируем SQL-скрипты для инициализации
     networks:
       - app-network
-    depends_on:
-      init-db:
-        condition: service_completed_successfully  # Ждем завершения инициализации
+#    depends_on:
+#      init-db:
+#        condition: service_completed_successfully  # Ждем завершения инициализации
 
   # Spring Boot приложение
   app:
@@ -43,10 +43,21 @@ services:
       SPRING_DATASOURCE_USERNAME: admin  # Имя пользователя
       SPRING_DATASOURCE_PASSWORD: admin  # Пароль
       SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Автоматическое обновление схемы базы данных
+      SPRING_JPA_SHOW_SQL: 'false'  # отключаем логи Hibernate
+      SERVER_TOMCAT_MAX_THREADS: '200'
     ports:
       - "8080:8080"  # Проброс порта приложения
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'  # лимиты для CPU
+          memory: 512M  # лимиты для памяти
+        reservations:
+          cpus: '0.5'  # Резервирование CPU
+          memory: 256M  # Резервирование памяти
+
 
 # Сеть для связи между контейнерами
 networks:
