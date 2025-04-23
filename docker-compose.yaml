@@ -1,4 +1,7 @@
+# docker compose на этапе лабы 7
+
 version: '3.8'
+
 
 services:
   # Инициализация базы данных
@@ -13,47 +16,47 @@ services:
 #      - app-network
 
   # База данных PostgreSQL
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mydatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./initdb/scripts_python:/docker-entrypoint-initdb.d  # Монтируем SQL-скрипты для инициализации
-    networks:
-      - app-network
+#  postgres:
+#    image: postgres:latest
+#    container_name: postgres
+#    environment:
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: admin
+#      POSTGRES_DB: mydatabase
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./initdb/scripts_python:/docker-entrypoint-initdb.d  # Монтируем SQL-скрипты для инициализации
+#    networks:
+#      - app-network
 #    depends_on:
 #      init-db:
 #        condition: service_completed_successfully  # Ждем завершения инициализации
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    networks:
-      - app-network
-    depends_on:
-      - postgres
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: pgadmin
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@example.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#      PGADMIN_CONFIG_SERVER_MODE: 'False'
+#    ports:
+#      - "5050:80"
+#    volumes:
+#      - pgadmin_data:/var/lib/pgadmin
+#    networks:
+#      - app-network
+#    depends_on:
+#      - postgres
 
   # Spring Boot приложение
   app:
     image: larinaaa1/myproject
     container_name: spring-boot-app
     restart: always
-    depends_on:
-      - postgres  # Зависимость от базы данныхsc
+#    depends_on:
+#      - postgres  # Зависимость от базы данныхsc
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase  # URL базы данных
       SPRING_DATASOURCE_USERNAME: admin  # Имя пользователя

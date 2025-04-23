@@ -33,7 +33,7 @@ def generate_car():
         "vin": fake.unique.bothify(text='??#####???'),  # 10 символов для VIN
         "model": f"{brand} {model}",
         "color": fake.safe_color_name(),
-        "rentalCostPerDay": round(random.uniform(20.0, 200.0), 2),
+        "rentalCostPerDay": 0.2,
         "city": fake.city(),
         "salonName": f"{brand} Center {fake.city()}"
     }
@@ -59,8 +59,8 @@ def generate_rental(client_id, car_id):
     return {
         "carId": car_id,
         "clientId": client_id,
-        "startDate": start_date.strftime("%Y-%m-%d"),
-        "endDate": end_date.strftime("%Y-%m-%d"),
+        "startDate": start_date.isoformat(),
+        "endDate": end_date.isoformat(),
         "totalCost": total_cost
     }
 

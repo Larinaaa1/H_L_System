@@ -21,7 +21,6 @@ public class CarController {
 
 
 
-
     // Получить все автомобили
     @GetMapping
     public List<CarDTO> getAllCars() {
