@@ -63,7 +63,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: admin  # Пароль
       SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Автоматическое обновление схемы базы данных
       SPRING_JPA_SHOW_SQL: 'false'  # отключаем логи Hibernate
-      SERVER_TOMCAT_MAX_THREADS: '200'
+      SERVER_TOMCAT_MAX_THREADS: 200
     ports:
       - "8080:8080"  # Проброс порта приложения
     networks:

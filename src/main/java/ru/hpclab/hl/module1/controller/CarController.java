@@ -51,14 +51,15 @@ public class CarController {
         carService.deleteCar(id);
     }
 
-    // Проверить доступность автомобиля на указанный период
-    @GetMapping("/availability")
-    public CarDTO getAvailableCarInfo(
-            @RequestParam String city,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate) {
-        return carService.getAvailableCarInfo(city, startDate, endDate);
-    }
+
+  //   Проверить доступность автомобиля на указанный период
+//    @GetMapping("/availability")
+//    public CarDTO getAvailableCarInfo(
+//            @RequestParam String city,
+//         @RequestParam LocalDate startDate,
+//            @RequestParam LocalDate endDate) {
+//        return carService.getAvailableCarInfo(city, startDate, endDate);
+//    }
 
     // Удалить данные
     @DeleteMapping("/clear")

@@ -69,11 +69,11 @@ public class CarService {
         return CarMapper.toDto(updatedCar);
 
     }
-
+    //
     // Проверить доступность автомобиля на указанный период
-    public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
-        return rentalService.getAvailableCarInfo(city, startDate, endDate);
-    }
+  //  public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
+  //      return rentalService.getAvailableCarInfo(city, startDate, endDate);
+   // }
 
     // Метод очистки данных
     public void clearAll() {

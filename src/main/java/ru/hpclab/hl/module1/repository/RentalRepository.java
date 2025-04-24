@@ -10,10 +10,11 @@ import java.util.List;
 
 public interface RentalRepository extends JpaRepository<Rental, Long> {
 
-    @Query("SELECT r FROM Rental r WHERE " +
-            "(:startDate BETWEEN r.startDate AND r.endDate) OR " +
-            "(:endDate BETWEEN r.startDate AND r.endDate) OR " +
-            "(r.startDate BETWEEN :startDate AND :endDate)")
-    List<Rental> findOverlappingRentals(@Param("startDate") LocalDate startDate,
-                                              @Param("endDate") LocalDate endDate);
+
+//    @Query("SELECT r FROM Rental r WHERE " +
+//            "(:startDate BETWEEN r.startDate AND r.endDate) OR " +
+//            "(:endDate BETWEEN r.startDate AND r.endDate) OR " +
+//            "(r.startDate BETWEEN :startDate AND :endDate)")
+//    List<Rental> findOverlappingRentals(@Param("startDate") LocalDate startDate,
+//                                              @Param("endDate") LocalDate endDate);
 }

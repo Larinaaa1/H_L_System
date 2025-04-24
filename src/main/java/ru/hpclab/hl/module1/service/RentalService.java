@@ -75,22 +75,22 @@ public class RentalService {
     }
 
 
-    public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
+   // public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
         // Получаем все автомобили в указанном городе
-        List<Car> carsInCity = carRepository.findByCity(city);
+     //   List<Car> carsInCity = carRepository.findByCity(city);
 
         // Получаем все аренды, которые пересекаются с указанным периодом
-        List<Rental> overlappingRentals = rentalRepository.findOverlappingRentals(startDate, endDate);
+       // List<Rental> overlappingRentals = rentalRepository.findOverlappingRentals(startDate, endDate);
 
-        Car result = carsInCity.stream()
-                .filter(car -> overlappingRentals.stream()
-                        .noneMatch(rental -> rental.getCar().getId().equals(car.getId())))
-                .findFirst() // Возвращаем первый доступный автомобиль
-                .orElse(null); // Если доступных автомобилей нет, возвращаем null
+     //   Car result = carsInCity.stream()
+         //       .filter(car -> overlappingRentals.stream()
+         //               .noneMatch(rental -> rental.getCar().getId().equals(car.getId())))
+         //       .findFirst() // Возвращаем первый доступный автомобиль
+         //       .orElse(null); // Если доступных автомобилей нет, возвращаем null
 
         // Находим первый доступный автомобиль
-        return CarMapper.toDto(result);
-    }
+    //    return CarMapper.toDto(result);
+    //}
 
     // Метод очистки данных
     public void clearAll() {
