@@ -12,6 +12,7 @@ import ru.hpclab.hl.module1.mapper.RentalMapper;
 import ru.hpclab.hl.module1.repository.RentalRepository;
 import ru.hpclab.hl.module1.repository.CarRepository;
 import ru.hpclab.hl.module1.repository.ClientRepository;
+import ru.hpclab.hl.module1.service.statistics.ObservabilityService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,19 +26,27 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final CarRepository carRepository;
     private final ClientRepository clientRepository;
+    private final ObservabilityService observabilityService;
 
     public List<RentalDTO> getAllRentals() {
-        return rentalRepository.findAll().stream()
+        observabilityService.start(getClass().getSimpleName() + ":getAllRentals");
+        List<RentalDTO> rentals = rentalRepository.findAll().stream()
                 .map(RentalMapper::toDTO)
                 .collect(Collectors.toList());
+        observabilityService.stop(getClass().getSimpleName() + ":getAllRentals");
+        return rentals;
     }
 
     public RentalDTO getRentalById(Long id) {
+        observabilityService.start(getClass().getSimpleName() + ":getRentalById");
         Optional<Rental> rentalEntity = rentalRepository.findById(id);
-        return rentalEntity.map(RentalMapper::toDTO).orElse(null);
+        RentalDTO result = rentalEntity.map(RentalMapper::toDTO).orElse(null);
+        observabilityService.stop(getClass().getSimpleName() + ":getRentalById");
+        return result;
     }
 
     public RentalDTO saveRental(RentalDTO rentalDTO) {
+        observabilityService.start(getClass().getSimpleName() + ":saveRental");
         Car car = carRepository.findById(rentalDTO.getCarId())
                 .orElseThrow(() -> new RuntimeException("Автомобиль не найден"));
 
@@ -45,14 +54,19 @@ public class RentalService {
                 .orElseThrow(() -> new RuntimeException("Клиент не найден"));
 
         Rental rentalEntity = RentalMapper.toEntity(rentalDTO, car, client);
-        return RentalMapper.toDTO(rentalRepository.save(rentalEntity));
+        RentalDTO result = RentalMapper.toDTO(rentalRepository.save(rentalEntity));
+        observabilityService.stop(getClass().getSimpleName() + ":saveRental");
+        return result;
     }
 
     public void deleteRental(Long id) {
+        observabilityService.start(getClass().getSimpleName() + ":deleteRental");
         rentalRepository.deleteById(id);
+        observabilityService.stop(getClass().getSimpleName() + ":deleteRental");
     }
 
     public RentalDTO updateRental(Long id, RentalDTO updatedRentalDTO) {
+        observabilityService.start(getClass().getSimpleName() + ":updateRental");
         Optional<Rental> rentalOptional = rentalRepository.findById(id);
         if (rentalOptional.isPresent()) {
             Rental rentalEntity = rentalOptional.get();
@@ -69,31 +83,17 @@ public class RentalService {
             rentalEntity.setEndDate(updatedRentalDTO.getEndDate());
             rentalEntity.setTotalCost(updatedRentalDTO.getTotalCost());
 
-            return RentalMapper.toDTO(rentalRepository.save(rentalEntity));
+            RentalDTO result = RentalMapper.toDTO(rentalRepository.save(rentalEntity));
+            observabilityService.stop(getClass().getSimpleName() + ":updateRental");
+            return result;
         }
+        observabilityService.stop(getClass().getSimpleName() + ":updateRental");
         return null;
     }
 
-
-   // public CarDTO getAvailableCarInfo(String city, LocalDate startDate, LocalDate endDate) {
-        // Получаем все автомобили в указанном городе
-     //   List<Car> carsInCity = carRepository.findByCity(city);
-
-        // Получаем все аренды, которые пересекаются с указанным периодом
-       // List<Rental> overlappingRentals = rentalRepository.findOverlappingRentals(startDate, endDate);
-
-     //   Car result = carsInCity.stream()
-         //       .filter(car -> overlappingRentals.stream()
-         //               .noneMatch(rental -> rental.getCar().getId().equals(car.getId())))
-         //       .findFirst() // Возвращаем первый доступный автомобиль
-         //       .orElse(null); // Если доступных автомобилей нет, возвращаем null
-
-        // Находим первый доступный автомобиль
-    //    return CarMapper.toDto(result);
-    //}
-
-    // Метод очистки данных
     public void clearAll() {
+        observabilityService.start(getClass().getSimpleName() + ":clearAll");
         rentalRepository.deleteAll();
+        observabilityService.stop(getClass().getSimpleName() + ":clearAll");
     }
 }

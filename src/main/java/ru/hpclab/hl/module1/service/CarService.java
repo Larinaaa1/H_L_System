@@ -11,6 +11,7 @@ import ru.hpclab.hl.module1.model.Client;
 import ru.hpclab.hl.module1.model.Rental;
 import ru.hpclab.hl.module1.repository.CarRepository;
 import ru.hpclab.hl.module1.repository.ClientRepository;
+import ru.hpclab.hl.module1.service.statistics.ObservabilityService;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,35 +26,48 @@ public class CarService {
     private final CarRepository carRepository;
     private final ClientRepository clientRepository;
     private final RentalService rentalService;
+    private final ObservabilityService observabilityService;
 
     // Получить все автомобили
     public List<CarDTO> getAllCars() {
-        return carRepository.findAll().stream()
+        this.observabilityService.start(getClass().getSimpleName() + ":getAllCars");
+        List<CarDTO> temp = carRepository.findAll().stream()
                 .map(CarMapper::toDto)
                 .collect(Collectors.toList());
+        this.observabilityService.stop(getClass().getSimpleName() + ":getAllCars");
+        return temp;
     }
 
     // Получить автомобиль по ID
     public CarDTO getCarById(Long id) {
+        this.observabilityService.start(getClass().getSimpleName() + ":getCarById");
         Optional<Car> carEntity = carRepository.findById(id);
-        return carEntity.map(CarMapper::toDto).orElse(null);
+        CarDTO temp = carEntity.map(CarMapper::toDto).orElse(null);
+        this.observabilityService.stop(getClass().getSimpleName() + ":getCarById");
+        return temp;
     }
 
     @Transactional
     // Сохранить автомобиль
     public CarDTO saveCar(CarDTO carDTO) {
+        this.observabilityService.start(getClass().getSimpleName() + ":saveCar");
         Car car = CarMapper.toEntity(carDTO);
         Car savedCar = carRepository.save(car);
-        return CarMapper.toDto(savedCar);
+        CarDTO savedCarDTO = CarMapper.toDto(savedCar);
+        this.observabilityService.stop(getClass().getSimpleName() + ":saveCar");
+        return savedCarDTO;
     }
 
     // Удалить автомобиль по ID
     public void deleteCar(Long id) {
+        this.observabilityService.start(getClass().getSimpleName() + ":deleteCar");
         carRepository.deleteById(id);
+        this.observabilityService.stop(getClass().getSimpleName() + ":deleteCar");
     }
 
     // Обновить информацию об автомобиле
     public CarDTO updateCar(Long id, CarDTO updatedCarDTO) {
+        this.observabilityService.start(getClass().getSimpleName() + ":updateCar");
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Автомобиль не найден"));
 
@@ -65,8 +79,10 @@ public class CarService {
         car.setSalonName(updatedCarDTO.getSalonName());
 
         Car updatedCar = carRepository.save(car);
+        CarDTO updatedCarDTOResult = CarMapper.toDto(updatedCar);
+        this.observabilityService.stop(getClass().getSimpleName() + ":updateCar");
 
-        return CarMapper.toDto(updatedCar);
+        return updatedCarDTOResult;
 
     }
     //
@@ -77,6 +93,8 @@ public class CarService {
 
     // Метод очистки данных
     public void clearAll() {
+        this.observabilityService.start(getClass().getSimpleName() + ":clearAll");
         carRepository.deleteAll();
+        this.observabilityService.stop(getClass().getSimpleName() + ":clearAll");
     }
 }
