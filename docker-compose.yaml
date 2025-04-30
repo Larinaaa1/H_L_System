@@ -64,6 +64,10 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Автоматическое обновление схемы базы данных
       SPRING_JPA_SHOW_SQL: 'false'  # отключаем логи Hibernate
       SERVER_TOMCAT_MAX_THREADS: 200
+      KAFKA_HOSTS: ${KAFKA_HOSTS:-hl22.zil:9094,hl23.zil:9094}
+      KAFKA_GROUP_ID: ${KAFKA_GROUP_ID:-larina-consumer-group}
+      KAFKA_TOPIC: ${KAFKA_TOPIC:-var08_lar}
+      KAFKA_CONCURRENCY: ${KAFKA_CONCURRENCY:-2}
     ports:
       - "8080:8080"  # Проброс порта приложения
     networks:
