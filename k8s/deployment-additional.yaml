@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: additional-service
+  namespace: var08
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: additional-service
+  template:
+    metadata:
+      labels:
+        app: additional-service
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - module1-service
+              topologyKey: kubernetes.io/hostname
+      imagePullSecrets:
+        - name: maria
+      containers:
+        - name: additional
+          image: larinaaa1/additionals:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: config
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1024Mi"
+            requests:
+              cpu: "200m"
+              memory: "1024Mi"

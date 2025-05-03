@@ -3,7 +3,7 @@ CREATE TABLE t_car (
     vin VARCHAR(17) UNIQUE NOT NULL,  -- VIN автомобиля (уникальный)
     model VARCHAR(100) NOT NULL,      -- Модель автомобиля
     color VARCHAR(50) NOT NULL,       -- Цвет автомобиля
-    rental_cost_per_day DECIMAL(10, 2) NOT NULL, -- Стоимость аренды в день
+    rental_cost_per_day FLOAT NOT NULL, -- Стоимость аренды в день
     city VARCHAR(100) NOT NULL,       -- Город, где находится автомобиль
     salon_name VARCHAR(255) NOT NULL  -- Название салона
 );
@@ -23,7 +23,7 @@ CREATE TABLE t_rental (
     client_id BIGINT NOT NULL REFERENCES t_client(id) ON DELETE CASCADE, -- Связь с клиентом
     start_date DATE NOT NULL,         -- Дата начала аренды
     end_date DATE NOT NULL,           -- Дата окончания аренды
-    total_cost DECIMAL(10, 2) NOT NULL -- Итоговая стоимость аренды
+    total_cost FLOAT NOT NULL -- Итоговая стоимость аренды
 );
 
 -- Создание индексов

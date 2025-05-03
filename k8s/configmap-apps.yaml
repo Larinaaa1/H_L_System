@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: var08
+data:
+  DDL_AUTO: "validate"
+  SHOW_SQL: "false"
+  DB_HOST: "10.60.3.26"
+  DB_PORT: "5432"
+  DB_NAME: "larinamv"
+  TOMCAT_THREADS: "200"
+  CORE_SERVICE_HOST: "module1-service"
+  CORE_SERVICE_PORT: "8080"
+  CORE_SERVICE_TIMEOUT: "60000"
+  KAFKA_CONCURRENCY: "2"
+  APP_HOST: "0.0.0.0"
+  KAFKA_HOSTS: "10.60.3.27:9094,10.60.3.28:9094"
